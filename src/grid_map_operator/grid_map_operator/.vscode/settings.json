@@ -1,0 +1,18 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/jh/dev_ws/pinkbot_slam/install/nav_msg/local/lib/python3.10/dist-packages",
+        "/home/jh/dev_ws/pinkbot_slam/install/grid_map_operator/lib/python3.10/site-packages",
+        "/home/jh/dev_ws/pinkbot_slam/install/action_server/lib/python3.10/site-packages",
+        "/home/jh/dev_ws/pinkbot_slam/install/action_client/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/jh/dev_ws/pinkbot_slam/install/nav_msg/local/lib/python3.10/dist-packages",
+        "/home/jh/dev_ws/pinkbot_slam/install/grid_map_operator/lib/python3.10/site-packages",
+        "/home/jh/dev_ws/pinkbot_slam/install/action_server/lib/python3.10/site-packages",
+        "/home/jh/dev_ws/pinkbot_slam/install/action_client/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
