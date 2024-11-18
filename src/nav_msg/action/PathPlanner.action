@@ -1,0 +1,13 @@
+# goal 
+float32 pos_x
+float32 pos_y
+float32 orientation_z
+---
+# Result 
+bool success
+float32 pos_x
+float32 pos_y
+float32 pos_orientation_z
+---
+# Feedback
+float32 remained_dist
