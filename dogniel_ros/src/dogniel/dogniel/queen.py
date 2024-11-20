@@ -66,6 +66,7 @@ class QueenMove(Node):
         # 모터 데이터 수신
         self.right_motor = right_motor
         self.left_motor = left_motor
+        #self.get_logger().info(f'Received motor data: Right={self.right_motor}, Left={self.left_motor}')
     
     def merge_grid_data(self, x, z):
         # 방향 데이터 수신
@@ -87,7 +88,7 @@ class QueenMove(Node):
                         # 메시지 발행
             self.cw_45()
             self.get_logger().info(f'cw activated{self.angular_z}')
-        elif self.linear_x > 0:
+        elif self.linear_x > 0 and self.right_motor is not None:
             self.straigt()
             
     def ccw_45(self):
@@ -131,16 +132,21 @@ class QueenMove(Node):
     def straigt(self):
         if self.step_go == False:
             self.error_init = round(3 * 0.288 * self.linear_x, 4)
+            print(self.left_motor, self.error_init)
             self.g = self.left_motor + self.error_init
             self.step_go = True
         self.error = round(self.g - self.left_motor, 4)
         
-        if self.error / self.error_init > 0.3:
-            self.msg.linear.x = self.error_init * 0.05
+        if self.error / self.error_init >= 0.8:
+            self.msg.linear.x = (math.exp(0.5308 * (self.error_init - self.error) / self.error_init)) - 0.882
+            self.maintain = (math.exp(0.5308 * (self.error_init - self.error) / self.error_init)) - 0.882
             self.msg.angular.z = 0.0
             self.publisher.publish(self.msg)
-        elif self.error / self.error_init <= 0.3:
-            self.msg.linear.x = (math.exp(-4 * (self.error_init - self.error) / self.error_init))
+        elif 0.2 < self.error / self.error_init < 0.8:
+            self.msg.linear.x = self.maintain
+            self.publisher.publish(self.msg)
+        elif self.error / self.error_init <= 0.2:
+            self.msg.linear.x = (math.exp(-1.6729 * (self.error_init - self.error) / self.error_init)) - math.exp(-1.8365)
             print("linear_x", self.msg.linear.x)
             self.publisher.publish(self.msg)
             

@@ -26,6 +26,8 @@ setup(
             'aruco_parking = dogniel.aruco_parking:main',
             'joint_aruco = dogniel.joint_aruco:main',
             'dogniel_amcl_pose = dogniel.dogniel_amcl_pose:main',
+            'aruco_data_pub = dogniel.aruco_data_pub:main',
+            'queen = dogniel.queen:main'
         ],
     },
 )

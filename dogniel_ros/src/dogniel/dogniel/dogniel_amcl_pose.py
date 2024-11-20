@@ -62,7 +62,7 @@ class DognielAmclPosePub(Node):
             msg.z = self.z
             msg.w = self.w
             self.publisher.publish(msg)
-            self.get_logger().info(f' x={msg.x}, y={msg.y}')
+            self.get_logger().info(f' x={msg.x}, y={msg.y}, z={msg.z}')
 
 def main():
     rclpy.init()
