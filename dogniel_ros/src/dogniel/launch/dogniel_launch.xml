@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="dogniel" exec="aruco_data_pub"/>
+    <node pkg="dogniel" exec="aruco_parking"/>
+    <node pkg="dogniel" exec="dogniel_amcl_pose"/>
+    <node pkg="dogniel" exec="joint_aruco"/>
+    <node pkg="dogniel" exec="queen"/>
+  </launch>
