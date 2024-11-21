@@ -16,5 +16,6 @@
         "/home/jh/dev_ws/pinkbot_slam/install/action_client/lib/python3.10/site-packages",
         "/opt/ros/humble/lib/python3.10/site-packages",
         "/opt/ros/humble/local/lib/python3.10/dist-packages"
-    ]
+    ],
+    "ros.distro": "humble"
 }
