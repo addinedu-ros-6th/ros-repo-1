@@ -13,6 +13,7 @@ from rclpy.node import Node
 from turtlesim.msg import Pose
 from dogniel_msgs.msg import ArucoData
 from rclpy.executors import MultiThreadedExecutor
+import utils
 
 class ArucoDataPublisher(Node):
     def __init__(self):
@@ -24,7 +25,6 @@ class ArucoDataPublisher(Node):
         msg.id = id
         msg.theta = theta
         msg.z = z
-        
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing: id={msg.id}, theta={msg.theta}, z={msg.z}')
 

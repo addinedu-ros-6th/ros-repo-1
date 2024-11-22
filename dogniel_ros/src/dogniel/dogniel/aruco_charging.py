@@ -61,8 +61,8 @@ class ArUcoRobotController(Node):
         self.step_3_1 = False
         self.step_4_1 = False
         
-        self.v = 0.1
-        self.w = 0.4
+        self.v = 0.2
+        self.w = 0.8
 
     def update(self, right, left, id, theta, z):
         self.right_motor = right
@@ -86,14 +86,16 @@ class ArUcoRobotController(Node):
                     self.theta = -0.01
             print(self.theta)
             print(self.right_motor)
-            if self.theta > 0:
+            if self.theta > 0.:
                 self.theta = abs(np.pi / 2 - abs(self.theta))
                 alpha = self.theta
                 if self.step_1_1 == False:
-                    self.g = self.right_motor + 2.8 * alpha
+                    self.g = self.right_motor + 2.7 * alpha
                     self.step_1_1 = True
                 print(self.g)
                 print(self.right_motor)
+                if self.g - self.right_motor < 0.5:
+                    self.w = 0.3
 
                 self.msg.angular.z = self.w * self.pm / abs(self.pm)
                 print("각속도", self.msg.angular.z)
@@ -109,13 +111,17 @@ class ArUcoRobotController(Node):
                     print("회전 완료")
                     print("1단계 완료")
                     self.step_1 = True
+                    self.w = 0.8
 
-            elif self.theta < 0:
+            elif self.theta < 0.:
                 self.theta = -abs(np.pi / 2 - abs(self.theta))
-                alpha = self.theta
+                alpha = -self.theta
                 if self.step_1_1 == False:
-                    self.g = self.left_motor + 2.8 * alpha
+                    self.g = self.left_motor + 2.7 * alpha
                     self.step_1_1 = True
+                    
+                if self.g - self.left_motor < 0.5:
+                    self.w = 0.3
 
                 self.msg.angular.z = self.w * self.pm / abs(self.pm)
                 self.publisher_.publish(self.msg)
@@ -130,6 +136,8 @@ class ArUcoRobotController(Node):
                     print("회전 완료")
                     print("1단계 완료")
                     self.step_1 = True
+                    self.w = 0.8
+                    
         if self.step_1 == True:
             self.go_x()
     def go_x(self):
@@ -138,7 +146,7 @@ class ArUcoRobotController(Node):
             print(self.x)
             #if self.pm > 0:
             if self.step_2_1 == False:
-                self.g = alpha * 40 + self.right_motor
+                self.g = alpha * 45 + self.right_motor
                 print(self.g)
                 print(self.right_motor)
                 self.step_2_1 = True
@@ -155,6 +163,7 @@ class ArUcoRobotController(Node):
                 self.publisher_.publish(self.msg)
                 self.step_2 = True
                 print("2단계 완료")
+                self.v = 0.2
                 """Move the robot along the x-axis relative to the marker."""
 
         #elif self.pm < 0:
@@ -180,15 +189,39 @@ class ArUcoRobotController(Node):
             alpha = (np.pi / 2)
             if self.pm > 0:
                 if self.step_3_1 == False:
-                    self.g = self.left_motor + 2.99 * alpha
+                    self.g = self.right_motor + 2.8 * alpha
                     self.step_3_1 = True
                     print(self.g)
                     print(self.left_motor)
 
+                if self.g - self.right_motor < 0.5:
+                    self.w = 0.4
                 self.msg.linear.x = 0.0
-                self.msg.angular.z = -self.pm / abs(self.pm) * self.w
+                self.msg.angular.z = self.pm / abs(self.pm) * self.w
                 self.publisher_.publish(self.msg)
-                self.get_logger().info(f"Rotating robot_3 by {np.pi / 2} radians.{round(self.g - self.left_motor, 2)}")
+                self.get_logger().info(f"Rotating robot_3 by {np.pi / 2} radians.{round(self.g - self.right_motor, 2)}")
+                if self.g <= self.right_motor:
+                    self.msg.linear.x = 0.0
+                    self.msg.angular.z = 0.0
+                    self.publisher_.publish(self.msg)
+                    print("회전 완료")
+                    self.step_3 = True
+                    print("3단계 완료")
+                    self.w = 0.8
+                    """Turn the robot 90 degrees in the direction of pm (1 or -1)."""
+
+            elif self.pm < 0:
+                if self.step_3_1 == False:
+                    self.g = self.left_motor + 2.8 * alpha
+                    self.step_3_1 = True
+                    
+                if self.g - self.left_motor < 0.5:
+                    self.w = 0.4
+
+                self.msg.linear.x = 0.0
+                self.msg.angular.z = self.pm / abs(self.pm) * self.w
+                self.publisher_.publish(self.msg)
+                self.get_logger().info(f"Rotating robot_3 by {np.pi / 2} radians. {round(self.g - self.left_motor, 2)}")
                 if self.g <= self.left_motor:
                     self.msg.linear.x = 0.0
                     self.msg.angular.z = 0.0
@@ -196,65 +229,32 @@ class ArUcoRobotController(Node):
                     print("회전 완료")
                     self.step_3 = True
                     print("3단계 완료")
-                    """Turn the robot 90 degrees in the direction of pm (1 or -1)."""
-
-            elif self.pm < 0:
-                if self.step_3_1 == False:
-                    self.g = self.right_motor + 2.99 * alpha
-                    self.step_3_1 = True
-
-                self.msg.linear.x = 0.0
-                self.msg.angular.z = -self.pm / abs(self.pm) * self.w
-                self.publisher_.publish(self.msg)
-                self.get_logger().info(f"Rotating robot_3 by {np.pi / 2} radians. {round(self.g - self.right_motor, 2)}")
-                if self.g <= self.right_motor:
-                    self.msg.linear.x = 0.0
-                    self.msg.angular.z = 0.0
-                    self.publisher_.publish(self.msg)
-                    print("회전 완료")
-                    self.step_3 = True
-                    print("3단계 완료")
+                    self.w = 0.8
                     """Turn the robot 90 degrees in the direction of pm (1 or -1)."""
                 
         if self.step_3 == True:
-            self.go_remain_30cm()
+            self.go_remain_6cm()
 
-    def go_remain_30cm(self):
+    def go_remain_6cm(self):
         if self.step_4 == False:
-            alpha = (self.z -0.3)
-            if self. pm > 0:
-                if self.step_4_1 == False:
-                    self.g = alpha * 0.27  + self.right_motor
-                    self.step_4_1 = True
-            elif self.pm <0:
-                if self.step_4_1 == False:
-                    self.g = alpha * 0.27  + self.left_motor
-                    self.step_4_1 = True
-            if alpha > 0:
+            alpha = (self.z -0.1)
+            if self.step_4_1 == False:
+                self.g = -alpha * 27  + self.right_motor
+                self.step_4_1 = True
 
-                self.msg.linear.x = self.v * alpha / abs(alpha)
+            if abs(self.g - self.right_motor) <= 1.5:
+                self.v = 0.05
+            self.msg.linear.x = -self.v * alpha / abs(alpha)
+            self.msg.angular.z = 0.0
+            print(self.msg)
+            self.publisher_.publish(self.msg)
+            self.get_logger().info(f"Moving robot_4 {self.x} meters along the x-axis.")
+            if self.g >= self.right_motor:
+                self.msg.linear.x = 0.0
                 self.msg.angular.z = 0.0
                 self.publisher_.publish(self.msg)
-                self.get_logger().info(f"Moving robot_4 {self.x} meters along the x-axis.")
-                if self.g <= self.right_motor:
-                    self.msg.linear.x = 0.0
-                    self.msg.angular.z = 0.0
-                    self.publisher_.publish(self.msg)
-                    print("4단계 완료")
-                    self.step_4 = True
-
-            elif alpha < 0:
-
-                self.msg.linear.x = self.v * alpha / abs(alpha)
-                self.msg.angular.z = 0.0
-                self.publisher_.publish(self.msg)
-                self.get_logger().info(f"Moving robot_4 {self.x} meters along the x-axis.")
-                if self.g >= self.left_motor:
-                    self.msg.linear.x = 0.0
-                    self.msg.angular.z = 0.0
-                    self.publisher_.publish(self.msg)
-                    print("4단계 완료")
-                    self.step_4 = True
+                print("4단계 완료")
+                self.step_4 = True
 
         if self.step_4 == True:
             #self.create_timer(15.0, self.shutdown_node)
