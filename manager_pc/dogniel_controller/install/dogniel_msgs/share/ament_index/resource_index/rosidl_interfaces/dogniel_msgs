@@ -1,0 +1,8 @@
+msg/ArucoData.idl
+msg/ArucoData.msg
+msg/ButtlerTurn.idl
+msg/ButtlerTurn.msg
+msg/DataMerge.idl
+msg/DataMerge.msg
+msg/DognielAmcl.idl
+msg/DognielAmcl.msg

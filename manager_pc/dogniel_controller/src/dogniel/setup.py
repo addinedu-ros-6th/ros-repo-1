@@ -27,7 +27,10 @@ setup(
             'joint_aruco = dogniel.joint_aruco:main',
             'dogniel_amcl_pose = dogniel.dogniel_amcl_pose:main',
             'aruco_data_pub = dogniel.aruco_data_pub:main',
-            'queen = dogniel.queen:main'
+            'queen = dogniel.queen:main',
+            'path_pub = dogniel.path_pub:main',
+            'go_destination_final = dogniel.go_destination_final:main',
+            'aruco_charging = dogniel.aruco_charging:main'
         ],
     },
 )

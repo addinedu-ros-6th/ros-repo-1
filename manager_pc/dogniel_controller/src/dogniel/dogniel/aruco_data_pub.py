@@ -5,7 +5,7 @@ import struct
 import numpy as np
 import math
 import threading
-from utils import ARUCO_DICT, aruco_display
+from dogniel.utils import ARUCO_DICT, aruco_display
 from cv2 import aruco
 import time
 import rclpy
@@ -13,7 +13,6 @@ from rclpy.node import Node
 from turtlesim.msg import Pose
 from dogniel_msgs.msg import ArucoData
 from rclpy.executors import MultiThreadedExecutor
-import utils
 
 class ArucoDataPublisher(Node):
     def __init__(self):
@@ -33,8 +32,8 @@ def receive_video(server_ip, aruco_pub):
     client_socket.connect((server_ip, 4000))  # 서버 IP와 포트
 
     marker_types = ["DICT_5X5_100", "DICT_7X7_100"]
-    matrix_coefficients_path = '/home/addinedu/ros2_ws/src/dogniel/dogniel/calibration_matrix.npy'
-    distortion_coefficients_path = '/home/addinedu/ros2_ws/src/dogniel/dogniel/distortion_coefficients.npy'
+    matrix_coefficients_path = '/home/jun/ros-repo-temp/ros-repo-1/manager_pc/dogniel_controller/src/dogniel/dogniel/calibration_matrix.npy'
+    distortion_coefficients_path = '/home/jun/ros-repo-temp/ros-repo-1/manager_pc/dogniel_controller/src/dogniel/dogniel/distortion_coefficients.npy'
     
     matrix_coefficients = np.load(matrix_coefficients_path)
     distortion_coefficients = np.load(distortion_coefficients_path)
@@ -110,7 +109,7 @@ def main():
     aruco_pub = ArucoDataPublisher()
 
     # 서버 IP 설정 (Raspberry Pi 또는 다른 서버의 IP)
-    server_ip = '192.168.0.4'  # Raspberry Pi의 IP 주소 입력
+    server_ip = 'localhost'  # Raspberry Pi의 IP 주소 입력
 
     # 비디오 수신을 별도의 스레드에서 실행
     video_thread = threading.Thread(target=receive_video, args=(server_ip, aruco_pub))

@@ -5,8 +5,10 @@ from geometry_msgs.msg import PoseWithCovarianceStamped
 from rclpy.executors import MultiThreadedExecutor
 from dogniel_msgs.msg import DognielAmcl
 from geometry_msgs.msg import Twist
+from std_msgs.msg import String
 import numpy as np
 import math
+import re
 
 class JointStateSub(Node):
     def __init__(self, go_destination):
@@ -47,6 +49,24 @@ class DognielAmclPoseSub(Node):
         w = round(data.w,4)
         self.get_logger().info(f'x={y}, y={x},z={z}w={w}')
         self.go_destination.merge_amcl_data(x, y, z)
+        
+class PathSub(Node):
+    def __init__(self, go_destination):
+        super().__init__('path_sub')
+        self.go_destination = go_destination
+        # PoseWithCovarianceStamped 토픽 구독
+        self.path_sub = self.create_subscription(
+            String,
+            '/path_result',
+            self.path_callback,
+            10
+        )
+        
+    def path_callback(self, data):
+        result = re.findall(r'[A-Za-z]|\d+', data.data)
+        result = [int(x) if x.isdigit() else x for x in result]
+        print(result)
+        self.go_destination.merge_path_data(result)
         
 class GoDestination(Node):
     def __init__(self):
@@ -104,10 +124,14 @@ class GoDestination(Node):
         self.amcl_z = z
             
         self.get_logger().info(f'Received motor data: x={self.amcl_x}, y={self.amcl_y}, y={self.amcl_z}')
+        
+    def merge_path_data(self, data):
+        # 모터 데이터 수신
+        self.path = data
+        #self.get_logger().info(f'Received motor data: Right={self.right_motor}, Left={self.left_motor}')
 
     def publish_message(self):
-        print(self.path[0])
-        print(self.amcl_z)
+
         if self.amcl_z < 0:
             self.south_value = -1
         if self.path is not None:    
@@ -367,10 +391,12 @@ def main():
     rclpy.init()
     go_destination = GoDestination()
     queen_joint_states = JointStateSub(go_destination)
+    path_sub = PathSub(go_destination)
     dogniel_pose_sub = DognielAmclPoseSub(go_destination)
     executor = MultiThreadedExecutor()
     executor.add_node(go_destination)
     executor.add_node(queen_joint_states)
+    executor.add_node(path_sub)
     executor.add_node(dogniel_pose_sub)
     executor.spin()
     executor.shutdown()

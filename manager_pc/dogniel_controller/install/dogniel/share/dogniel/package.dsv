@@ -1,0 +1,6 @@
+source;share/dogniel/hook/pythonpath.ps1
+source;share/dogniel/hook/pythonpath.dsv
+source;share/dogniel/hook/pythonpath.sh
+source;share/dogniel/hook/ament_prefix_path.ps1
+source;share/dogniel/hook/ament_prefix_path.dsv
+source;share/dogniel/hook/ament_prefix_path.sh
