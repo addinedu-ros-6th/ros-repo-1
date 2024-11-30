@@ -59,7 +59,10 @@
 
 ## 🎠 6. 프로젝트 구현
 
-![pic1.gif](https://drive.google.com/uc?id=1giqU31S85B1wxzE18tSyyXeS7YKefqzM)
+
+
+![pic1](https://github.com/user-attachments/assets/2e1c512e-5d1b-46f6-a8b7-462345a8f2d6)
+
 
 
 
