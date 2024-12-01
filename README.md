@@ -59,9 +59,22 @@
 
 ## 🎠 6. 프로젝트 구현
 
+### 6-1. 매니저 GUI
 
+![manager_gui](https://github.com/user-attachments/assets/fe0ea852-d70e-4ec9-9e7c-094654a24628)
 
+### 6-2. 유저 수동 조작
+
+![user_gui](https://github.com/user-attachments/assets/33508007-3746-4313-8afb-e3e32b4b7924)
 ![pic1](https://github.com/user-attachments/assets/2e1c512e-5d1b-46f6-a8b7-462345a8f2d6)
+
+### 6-3. 자세 보정
+
+![aruco_parking](https://github.com/user-attachments/assets/716aad6d-a15c-4280-bf07-69abecb30dcb)
+
+### 6-4. 자동 충전
+
+
 
 
 
